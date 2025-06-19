@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terabox API Documentation & Telegram Bot Guide</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), #1a6ca6);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background-color: var(--secondary);
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .code-block {
+            position: relative;
+            background: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 5px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.95rem;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .endpoint {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .endpoint-method {
+            background: var(--primary);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .tip {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn-large {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+        }
+        
+        .center {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .endpoint {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .endpoint div {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Terabox API & Telegram Bot Documentation</h1>
+            <p class="subtitle">Learn how to integrate Terabox API into your Telegram bot to handle files up to 2GB with our comprehensive guide and ready-to-use code snippets.</p>
+        </header>
+        
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">API Endpoints</div>
+                <div class="card-body">
+                    <div class="endpoint">
+                        <div>
+                            <span class="endpoint-method">GET</span> 
+                            /api?url=TERABOX_URL
+                        </div>
+                        <button class="copy-btn" data-copy="https://noor-terabox-api.woodmirror.workers.dev/api?url=TERABOX_URL">Copy</button>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div>
+                            <span class="endpoint-method">POST</span> 
+                            / (with JSON body)
+                        </div>
+                        <button class="copy-btn" data-copy='{"link": "TERABOX_URL"}'>Copy</button>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div>
+                            <span class="endpoint-method">GET</span> 
+                            /proxy?url=...&file_name=...
+                        </div>
+                        <button class="copy-btn" data-copy="https://noor-terabox-api.woodmirror.workers.dev/proxy?url=DOWNLOAD_URL&file_name=FILENAME">Copy</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">API Status Check</div>
+                <div class="card-body">
+                    <div class="endpoint">
+                        <div>
+                            <span class="endpoint-method">GET</span> 
+                            / (root endpoint)
+                        </div>
+                        <button class="copy-btn" data-copy="https://noor-terabox-api.woodmirror.workers.dev/">Copy</button>
+                    </div>
+                    
+                    <div class="code-block">
+                        <button class="copy-btn">Copy</button>
+                        <pre>{
+  "success": "✅ Terabox API working...",
+  "version": "✨v2.0"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">API Parameters</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>file_name</strong></td>
+                            <td>String</td>
+                            <td>Name of the file</td>
+                            <td>"movie.mp4"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>file_size</strong></td>
+                            <td>String</td>
+                            <td>Human-readable file size</td>
+                            <td>"1.45 GB"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>size_bytes</strong></td>
+                            <td>Integer</td>
+                            <td>File size in bytes</td>
+                            <td>1556928461</td>
+                        </tr>
+                        <tr>
+                            <td><strong>thumbnail</strong></td>
+                            <td>String</td>
+                            <td>URL of the file thumbnail</td>
+                            <td>"https://example.com/thumb.jpg"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>proxy_url</strong></td>
+                            <td>String</td>
+                            <td>Downloadable URL for direct access</td>
+                            <td>"https://api.com/proxy?url=..."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>download_link</strong></td>
+                            <td>String</td>
+                            <td>Original direct download link</td>
+                            <td>"https://terabox.com/file.mp4"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">API Usage Tips</h2>
+            
+            <div class="tip">
+                <div class="tip-title">Display Thumbnail</div>
+                <div class="code-block">
+                    <button class="copy-btn">Copy</button>
+                    <pre>if file_info.get('thumbnail'):
+    context.bot.send_photo(
+        chat_id=update.effective_chat.id,
+        photo=file_info['thumbnail']
+    )</pre>
+                </div>
+            </div>
+            
+            <div class="tip">
+                <div class="tip-title">Handle Files Up to 2GB</div>
+                <div class="code-block">
+                    <button class="copy-btn">Copy</button>
+                    <pre># Telegram supports files up to 2GB via direct URL
+context.bot.send_document(
+    chat_id=update.effective_chat.id,
+    document=file_info['proxy_url'],
+    filename=file_info['file_name'],
+    caption=f"📁 {file_info['file_name']}\n📦 Size: {file_info['file_size']}"
+)</pre>
+                </div>
+            </div>
+            
+            <div class="tip">
+                <div class="tip-title">Show Download Progress</div>
+                <div class="code-block">
+                    <button class="copy-btn">Copy</button>
+                    <pre># Show progress during download
+response = requests.get(file_info['proxy_url'], stream=True)
+total_size = int(response.headers.get('content-length', 0))
+
+with open(file_info['file_name'], 'wb') as f:
+    downloaded = 0
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
+        downloaded += len(chunk)
+        progress = int(50 * downloaded / total_size)
+        update_progress_message(
+            f"⬇️ Downloading: [{progress * '='}>{(50-progress) * ' '}] "
+            f"{downloaded/total_size:.0%}"
+        )</pre>
+                </div>
+            </div>
+            
+            <div class="tip">
+                <div class="tip-title">Error Handling</div>
+                <div class="code-block">
+                    <button class="copy-btn">Copy</button>
+                    <pre>try:
+    # API call
+except requests.exceptions.RequestException as e:
+    update.message.reply_text(f"🌐 Network error: {str(e)}")
+except ValueError as e:
+    update.message.reply_text(f"🔤 JSON parsing error: {str(e)}")
+except Exception as e:
+    update.message.reply_text(f"❌ Error: {str(e)}")</pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">Complete Telegram Bot Code</h2>
+            <p>This bot supports files up to 2GB using Terabox API:</p>
+            
+            <div class="code-block">
+                <button class="copy-btn" id="copy-full-code">Copy Full Code</button>
+                <pre id="full-code">import requests
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
+# API Configuration
+API_BASE = "https://noor-terabox-api.woodmirror.workers.dev"
+
+def start(update: Update, context: CallbackContext):
+    """Send welcome message when user sends /start"""
+    update.message.reply_text(
+        "🚀 *Terabox Downloader Bot*\n"
+        "Send me any Terabox link to download files up to 2GB!\n\n"
+        "✅ Supports videos, documents, and archives\n"
+        "⚡ Fast and reliable downloads",
+        parse_mode="Markdown"
+    )
+
+def handle_message(update: Update, context: CallbackContext):
+    """Process Terabox links sent by users"""
+    # Get the link from user message
+    terabox_url = update.message.text.strip()
+    
+    # Validate the URL
+    if "terabox" not in terabox_url:
+        update.message.reply_text("⚠️ Please send a valid Terabox link")
+        return
+    
+    # Show processing message
+    processing_msg = update.message.reply_text("🔍 Processing your link...")
+    
+    try:
+        # Call Terabox API
+        api_url = f"{API_BASE}/api?url={terabox_url}"
+        response = requests.get(api_url, timeout=15)
+        response.raise_for_status()
+        data = response.json()
+        
+        # Check for API errors
+        if "error" in data:
+            raise Exception(data["error"])
+        
+        # Prepare file information
+        file_info = {
+            "name": data["file_name"],
+            "size": data["file_size"],
+            "size_bytes": data["size_bytes"],
+            "thumbnail": data["thumbnail"],
+            "download_url": data["proxy_url"]
+        }
+        
+        # Send thumbnail if available
+        if file_info["thumbnail"]:
+            context.bot.send_photo(
+                chat_id=update.effective_chat.id,
+                photo=file_info["thumbnail"],
+                caption=f"📸 Preview of *{file_info['name']}*",
+                parse_mode="Markdown"
+            )
+        
+        # Send file using direct URL (supports up to 2GB)
+        context.bot.send_document(
+            chat_id=update.effective_chat.id,
+            document=file_info["download_url"],
+            filename=file_info["name"],
+            caption=f"📁 *{file_info['name']}*\n📦 Size: `{file_info['size']}`",
+            parse_mode="Markdown"
+        )
+        
+        # Delete processing message
+        processing_msg.delete()
+            
+    except Exception as e:
+        # Handle errors
+        processing_msg.edit_text(f"❌ Error: {str(e)}")
+
+def main():
+    """Start the Telegram bot"""
+    # Replace with your bot token
+    TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+    
+    # Create bot instance
+    updater = Updater(TOKEN)
+    dp = updater.dispatcher
+    
+    # Register handlers
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+    
+    # Start the bot
+    updater.start_polling()
+    print("Bot is running...")
+    updater.idle()
+
+if __name__ == "__main__":
+    main()</pre>
+            </div>
+            
+            <div class="tip">
+                <div class="tip-title">Deployment Instructions</div>
+                <ol>
+                    <li>Create a new Telegram bot using <a href="https://t.me/BotFather" target="_blank">BotFather</a></li>
+                    <li>Replace <code>YOUR_TELEGRAM_BOT_TOKEN</code> with your actual token</li>
+                    <li>Set <code>API_BASE</code> to your Terabox API worker URL</li>
+                    <li>Install required packages: <code>pip install python-telegram-bot requests</code></li>
+                    <li>Run the bot: <code>python your_bot_file.py</code></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="center">
+            <button class="btn btn-large" id="copy-all-btn">Copy All Code Snippets</button>
+            <p style="margin-top: 15px; color: var(--gray)">Click to copy all code examples to clipboard</p>
+        </div>
+        
+        <footer>
+            <p>Terabox API Documentation & Telegram Bot Guide | Created for Developers</p>
+            <p>Note: Replace API_BASE with your actual worker URL and use your Telegram bot token</p>
+        </footer>
+    </div>
+
+    <script>
+        // Copy buttons functionality
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // For code blocks
+                if(this.parentElement.classList.contains('code-block')) {
+                    const code = this.parentElement.querySelector('pre').textContent;
+                    copyToClipboard(code);
+                    showCopiedMessage(this);
+                }
+                // For endpoint buttons
+                else if(this.hasAttribute('data-copy')) {
+                    const text = this.getAttribute('data-copy');
+                    copyToClipboard(text);
+                    showCopiedMessage(this);
+                }
+            });
+        });
+        
+        // Special button for copying the full code
+        document.getElementById('copy-full-code').addEventListener('click', function() {
+            const code = document.getElementById('full-code').textContent;
+            copyToClipboard(code);
+            showCopiedMessage(this);
+        });
+        
+        // Copy all code snippets
+        document.getElementById('copy-all-btn').addEventListener('click', function() {
+            let allCode = '';
+            
+            // Get all code snippets
+            document.querySelectorAll('.code-block pre').forEach(pre => {
+                allCode += pre.textContent + '\n\n';
+            });
+            
+            // Copy to clipboard
+            copyToClipboard(allCode);
+            showCopiedMessage(this);
+        });
+        
+        // Copy text to clipboard function
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+        
+        // Show "Copied!" message
+        function showCopiedMessage(button) {
+            const originalText = button.textContent;
+            button.textContent = '✓ Copied!';
+            button.style.background = '#2ecc71';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>    
